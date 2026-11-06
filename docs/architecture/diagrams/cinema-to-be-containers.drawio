@@ -1,0 +1,289 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="cinema-to-be" name="C4 Containers — To-Be">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="2410" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="heading" value="Кинобездна — целевая архитектура" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=34;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="55" y="28" width="1600" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="C4 · Container diagram · конечное состояние после выделения доменов" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=21;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="55" y="82" width="1900" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-heading" value="Обозначения" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=22;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="650" y="145" width="500" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-line-http" value="" style="shape=line;strokeColor=#2463a4;strokeWidth=3;endArrow=block;endFill=1;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="650" y="205" width="85" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-http" value="Синхронное обращение HTTP" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="755" y="187" width="610" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-line-sql" value="" style="shape=line;strokeColor=#536274;strokeWidth=3;endArrow=block;endFill=1;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="650" y="240" width="85" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-sql" value="Доступ владельца к данным SQL" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="755" y="222" width="610" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-line-event" value="" style="shape=line;strokeColor=#7944a4;strokeWidth=3;endArrow=block;endFill=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="275" width="85" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-event" value="Асинхронные события через Kafka" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="755" y="257" width="610" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-note" value="Стрелка: инициатор → вызываемый контейнер.&lt;br&gt;Потребители сами читают Kafka; направление&lt;br&gt;стрелки не означает направление потока событий." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="157" width="860" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="system-boundary" value="" style="rounded=1;arcSize=2;fillColor=#fbfcfe;strokeColor=#667b91;dashed=1;dashPattern=6 4;" vertex="1" parent="1">
+          <mxGeometry x="35" y="330" width="2330" height="1970" as="geometry" />
+        </mxCell>
+        <mxCell id="system-title" value="Кинобездна [Software System]" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=21;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="645" y="342" width="780" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-Users" value="Домен Users" style="rounded=1;arcSize=3;fillColor=#f0f5fa;strokeColor=#b3c3d4;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=top;spacingTop=12;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="620" y="385" width="1030" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-Movies" value="Домен Movies" style="rounded=1;arcSize=3;fillColor=#f0f5fa;strokeColor=#b3c3d4;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=top;spacingTop=12;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="620" y="715" width="1030" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-Payments" value="Домен Payments" style="rounded=1;arcSize=3;fillColor=#f0f5fa;strokeColor=#b3c3d4;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=top;spacingTop=12;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1045" width="1030" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-Subscriptions" value="Домен Subscriptions" style="rounded=1;arcSize=3;fillColor=#f0f5fa;strokeColor=#b3c3d4;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=top;spacingTop=12;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1375" width="1030" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="domain-Viewer-Activity" value="Домен Viewer Activity" style="rounded=1;arcSize=3;fillColor=#f0f5fa;strokeColor=#b3c3d4;html=1;fontSize=20;fontStyle=1;align=left;verticalAlign=top;spacingTop=12;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1705" width="1030" height="505" as="geometry" />
+        </mxCell>
+        <mxCell id="client_http" value="Работает с системой&lt;br&gt;HTTPS / JSON" source="viewer" target="gateway" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="route_users" value="Профиль&lt;br&gt;HTTP / JSON" source="gateway" target="users" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="555" />
+              <mxPoint x="490" y="527" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="route_movies" value="Каталог&lt;br&gt;HTTP / JSON" source="gateway" target="movies" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="555" />
+              <mxPoint x="490" y="857" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="route_payments" value="Оплата&lt;br&gt;HTTP / JSON" source="gateway" target="payments" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="555" />
+              <mxPoint x="490" y="1187" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="route_subscriptions" value="Подписки&lt;br&gt;HTTP / JSON" source="gateway" target="subscriptions" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="555" />
+              <mxPoint x="490" y="1517" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="route_activity" value="Активность&lt;br&gt;HTTP / JSON" source="gateway" target="activity" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#2463a4;dashed=0;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.49696969696969695;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="555" />
+              <mxPoint x="490" y="1852" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_users" value="Читает / пишет&lt;br&gt;SQL" source="users" target="users_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=1.0;exitY=0.4967741935483871;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_movies" value="Каталог и проекция&lt;br&gt;SQL" source="movies" target="movies_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=1.0;exitY=0.4967741935483871;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_payments" value="Платежи и Outbox&lt;br&gt;SQL" source="payments" target="payments_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=1.0;exitY=0.4967741935483871;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_subscriptions" value="Подписки и Outbox&lt;br&gt;SQL" source="subscriptions" target="subscriptions_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=1.0;exitY=0.4967741935483871;entryX=0.0;entryY=0.4967741935483871;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_activity" value="Просмотры, оценки&lt;br&gt;SQL" source="activity" target="activity_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=0.5;exitY=1.0;entryX=0.0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="2105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="store_worker" value="Читает оценки;&lt;br&gt;пишет расчёт [SQL]" source="rating_worker" target="activity_db" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#536274;dashed=0;exitX=0.5;exitY=1.0;entryX=0.75;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1430" y="1980" />
+              <mxPoint x="1220" y="1980" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ratings_to_movies" value="Читает готовые рейтинги [Kafka]" source="movies" target="kafka" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#7944a4;dashed=1;exitX=0.5;exitY=1.0;entryX=0.0;entryY=0.1590909090909091;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="1010" />
+              <mxPoint x="1770" y="1010" />
+              <mxPoint x="1770" y="1170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="purchase_payments" value="Публикует оплаты; читает результаты активации [Kafka]" source="payments" target="kafka" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#7944a4;dashed=1;exitX=0.5;exitY=1.0;entryX=0.0;entryY=0.36363636363636365;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="1340" />
+              <mxPoint x="1740" y="1340" />
+              <mxPoint x="1740" y="1260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="purchase_subscriptions" value="Читает оплаты; публикует результаты активации [Kafka]" source="subscriptions" target="kafka" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#7944a4;dashed=1;exitX=0.5;exitY=1.0;entryX=0.0;entryY=0.6136363636363636;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="1670" />
+              <mxPoint x="1770" y="1670" />
+              <mxPoint x="1770" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rating_changes" value="Публикует изменения оценок [Kafka / Outbox]" source="activity" target="kafka" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#7944a4;dashed=1;exitX=0.0;exitY=0.8484848484848485;entryX=0.0;entryY=0.8181818181818182;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="595" y="1910" />
+              <mxPoint x="595" y="2265" />
+              <mxPoint x="1820" y="2265" />
+              <mxPoint x="1820" y="1460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rating_calculation" value="Читает изменения;&lt;br&gt;публикует рейтинг&lt;br&gt;[Kafka / Outbox]" source="rating_worker" target="kafka" edge="1" parent="1" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;noLabel=1;strokeWidth=3;strokeColor=#7944a4;dashed=1;exitX=1.0;exitY=0.49696969696969695;entryX=0.0;entryY=0.9318181818181818;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1860" y="1852" />
+              <mxPoint x="1860" y="1510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="viewer" value="&lt;b&gt;Пользователь&lt;/b&gt;&lt;br&gt;[Person]&lt;br&gt;&lt;br&gt;Каталог, оценки, просмотры,&lt;br&gt;покупка и состояние подписки" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#253d52;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="125" width="340" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="&lt;b&gt;API Gateway&lt;/b&gt;&lt;br&gt;[Container: Go / own proxy]&lt;br&gt;&lt;br&gt;Единый HTTP-вход; маршруты&lt;br&gt;Проверки личности и API-прав&lt;br&gt;Логи и метрики запросов&lt;br&gt;Выборочный кэш — по политике" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="340" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="users" value="&lt;b&gt;Users API&lt;/b&gt;&lt;br&gt;[Container: Go]&lt;br&gt;&lt;br&gt;Учётные записи и профили&lt;br&gt;Владелец идентификации" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="450" width="340" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="users_db" value="&lt;b&gt;Users DB&lt;/b&gt;&lt;br&gt;[Container: PostgreSQL]&lt;br&gt;&lt;br&gt;Аккаунты, профиль&lt;br&gt;Учётные данные" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#dceaf5;strokeColor=#304d67;strokeWidth=2;fontColor=#243449;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="450" width="360" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="movies" value="&lt;b&gt;Movies API&lt;/b&gt;&lt;br&gt;[Container: Go]&lt;br&gt;&lt;br&gt;Каталог и карточки фильмов&lt;br&gt;Потребитель готовых рейтингов" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="780" width="340" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="movies_db" value="&lt;b&gt;Movies DB&lt;/b&gt;&lt;br&gt;[Container: PostgreSQL]&lt;br&gt;&lt;br&gt;Фильмы, жанры&lt;br&gt;Проекция рейтинга и её версия" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#dceaf5;strokeColor=#304d67;strokeWidth=2;fontColor=#243449;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="780" width="360" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="payments" value="&lt;b&gt;Payments API&lt;/b&gt;&lt;br&gt;[Container: Go]&lt;br&gt;&lt;br&gt;Денежные операции и статусы&lt;br&gt;Участник саги; Outbox relay" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1110" width="340" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="payments_db" value="&lt;b&gt;Payments DB&lt;/b&gt;&lt;br&gt;[Container: PostgreSQL]&lt;br&gt;&lt;br&gt;Платежи и ход покупки&lt;br&gt;Outbox, отметки обработки" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#dceaf5;strokeColor=#304d67;strokeWidth=2;fontColor=#243449;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1110" width="360" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="subscriptions" value="&lt;b&gt;Subscriptions API&lt;/b&gt;&lt;br&gt;[Container: Go]&lt;br&gt;&lt;br&gt;Тариф, период и право доступа&lt;br&gt;Активация; Outbox relay" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1440" width="340" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="subscriptions_db" value="&lt;b&gt;Subscriptions DB&lt;/b&gt;&lt;br&gt;[Container: PostgreSQL]&lt;br&gt;&lt;br&gt;Подписки, периоды доступа&lt;br&gt;Outbox, отметки обработки" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#dceaf5;strokeColor=#304d67;strokeWidth=2;fontColor=#243449;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1440" width="360" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="activity" value="&lt;b&gt;Viewer Activity API&lt;/b&gt;&lt;br&gt;[Container: Go]&lt;br&gt;&lt;br&gt;Просмотры, оценки и отзывы&lt;br&gt;Запись изменений; Outbox relay" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="650" y="1770" width="340" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="rating_worker" value="&lt;b&gt;Rating Worker&lt;/b&gt;&lt;br&gt;[Container: Go worker]&lt;br&gt;&lt;br&gt;Пересчёт затронутых фильмов&lt;br&gt;Публикация рейтинга; Outbox relay" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#176395;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1770" width="360" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="activity_db" value="&lt;b&gt;Viewer Activity DB&lt;/b&gt;&lt;br&gt;[Container: PostgreSQL]&lt;br&gt;&lt;br&gt;Просмотры, оценки, отзывы&lt;br&gt;Расчёты, версии, Outbox&lt;br&gt;Отметки обработки событий" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#dceaf5;strokeColor=#304d67;strokeWidth=2;fontColor=#243449;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="950" y="2020" width="360" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka" value="&lt;b&gt;Event Streaming&lt;/b&gt;&lt;br&gt;[Container: Apache Kafka]&lt;br&gt;&lt;br&gt;Подтверждённые оплаты&lt;br&gt;Результаты активации&lt;br&gt;&lt;br&gt;Изменения личных оценок&lt;br&gt;Рассчитанные рейтинги&lt;br&gt;&lt;br&gt;Хранение и доставка событий&lt;br&gt;Повторное чтение потребителями" style="rounded=1;arcSize=7;whiteSpace=wrap;html=1;fillColor=#644087;strokeColor=#304d67;strokeWidth=2;fontColor=#ffffff;fontSize=18;fontFamily=DejaVu Sans;align=center;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1900" y="1100" width="410" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="client_http-label" value="Работает с системой&lt;br&gt;HTTPS / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="120.0" y="283.0" width="260" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="route_users-label" value="Профиль&lt;br&gt;HTTP / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="496.0" y="469.0" width="148" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="route_movies-label" value="Каталог&lt;br&gt;HTTP / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="496.0" y="799.0" width="148" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="route_payments-label" value="Оплата&lt;br&gt;HTTP / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="496.0" y="1129.0" width="148" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="route_subscriptions-label" value="Подписки&lt;br&gt;HTTP / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="496.0" y="1459.0" width="148" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="route_activity-label" value="Активность&lt;br&gt;HTTP / JSON" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#2463a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="496.0" y="1794.0" width="148" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="store_users-label" value="Читает / пишет&lt;br&gt;SQL" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1003.0" y="466.0" width="234" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="store_movies-label" value="Каталог и проекция&lt;br&gt;SQL" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1003.0" y="796.0" width="234" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="store_payments-label" value="Платежи и Outbox&lt;br&gt;SQL" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1003.0" y="1126.0" width="234" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="store_subscriptions-label" value="Подписки и Outbox&lt;br&gt;SQL" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1003.0" y="1456.0" width="234" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="store_activity-label" value="Просмотры, оценки&lt;br&gt;SQL" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="682.5" y="1969.0" width="245" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="store_worker-label" value="Читает оценки;&lt;br&gt;пишет расчёт [SQL]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#536274;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1330.0" y="2044.0" width="300" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="ratings_to_movies-label" value="Читает готовые рейтинги [Kafka]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#7944a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="930.0" y="973.5" width="600" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="purchase_payments-label" value="Публикует оплаты; читает результаты активации [Kafka]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#7944a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="845.0" y="1303.5" width="850" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="purchase_subscriptions-label" value="Читает оплаты; публикует результаты активации [Kafka]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#7944a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="845.0" y="1633.5" width="850" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="rating_changes-label" value="Публикует изменения оценок [Kafka / Outbox]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#7944a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="845.0" y="2228.5" width="730" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="rating_calculation-label" value="Читает изменения;&lt;br&gt;публикует рейтинг&lt;br&gt;[Kafka / Outbox]" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=17;fontColor=#7944a4;fillColor=#fbfcfe;" vertex="1" parent="1">
+          <mxGeometry x="1880.0" y="1791.5" width="320" height="77" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway-note" value="Gateway проверяет общие права.&lt;br&gt;Ресурсные и бизнес-проверки —&lt;br&gt;в доменных API.&lt;br&gt;&lt;br&gt;Кэш по умолчанию выключен.&lt;br&gt;Кэш и IdP не требуют здесь&lt;br&gt;отдельных контейнеров." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="80" y="765" width="420" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="kafka-note" value="Outbox и учёт повторов —&lt;br&gt;в хранилищах участников.&lt;br&gt;Relay и consumer — внутренние&lt;br&gt;роли соответствующих сервисов.&lt;br&gt;&lt;br&gt;Хореография Payments /&lt;br&gt;Subscriptions; без оркестратора.&lt;br&gt;&lt;br&gt;Рейтинг в Movies — проекция.&lt;br&gt;Пока расчёт задерживается,&lt;br&gt;API показывает сохранённое.&lt;br&gt;До первого результата —&lt;br&gt;отсутствие рейтинга." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="1910" y="550" width="430" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="physical-note" value="Хранилища разделены логически по владельцам. В учебном окружении допустим один PostgreSQL с отдельными БД и доступами.&lt;br&gt;Viewer Activity API и Rating Worker — два приложения одного домена; Kafka не заменяет БД чтения.&lt;br&gt;Диаграмма описывает To-Be. Монолит, учебный events, миграция трафика и развёртывание относятся к заданиям 2–5." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=18;fontFamily=DejaVu Sans;fontColor=#243449;" vertex="1" parent="1">
+          <mxGeometry x="55" y="2315" width="2300" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
