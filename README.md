@@ -103,7 +103,7 @@ GitHub Actions для непрерывной интеграции и разве�
 
 3. Останавливаем сервисы:
    ```bash
-   docker-compose down -v
+   docker compose stop
    ```
 
 4. После внесения изменений рестартим:
@@ -220,3 +220,12 @@ chmod +x run-tests.sh
 2. Протестируйте постепенный переход, изменив переменную окружения MOVIES_MIGRATION_PERCENT в файле docker-compose.yml.
 
 3. Проверьте топики Kafka и сообщения через Kafka UI по адресу http://localhost:8090
+## Реализация задания 2
+
+Go proxy и events реализованы. Proxy распределяет каждый запрос каталога независимо; `GRADUAL_MIGRATION=false` направляет весь каталог в movies. Откат: `true` и `0`. После изменения окружения нужен `docker compose up -d --no-deps --force-recreate proxy-service`. Конфигурация читается при старте. При отказе выбранного upstream возвращается 502/504, повторов и fallback нет.
+
+Events валидирует JSON и публикует envelope синхронно с `RequireAll`; 201 содержит координаты подтверждённой записи. Consumer группы `cinemaabyss-events` пишет результат в stdout, затем сохраняет offset. Повторные строки после сбоя допустимы. Health подтверждает только работу HTTP. Общая БД, один брокер и отсутствие идемпотентности HTTP сохранены для учебного MVP; Saga и Outbox здесь не реализованы.
+
+Запуск: `docker compose up -d --build`. Проверки: `cd tests/postman && npm install && npm run test:local`. Остановка: `docker compose stop`.
+
+Фактическая приёмка и ограничения хоста: [результат задания 2](Project_template.md#результат-задания-2). Решения: [миграция трафика](docs/architecture/decisions/011-movies-traffic-migration.md), [доставка событий](docs/architecture/decisions/012-events-mvp-delivery.md). Kubernetes, Helm и Istio остаются следующими заданиями.

@@ -22,11 +22,7 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"],
                 "type": "text/javascript"
               }
             }
@@ -594,6 +590,15 @@
                   "pm.test(\"Response has status success\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.status).to.equal(\"success\");",
+                  "});",
+                  "pm.test(\"Kafka coordinates and envelope\", function () {",
+                  "  const r = pm.response.json();",
+                  "  pm.expect(r.partition).to.be.a(\"number\"); pm.expect(r.partition).to.be.at.least(0);",
+                  "  pm.expect(r.offset).to.be.a(\"number\"); pm.expect(r.offset).to.be.at.least(0);",
+                  "  pm.expect(r.event.id).to.match(/^[a-f0-9]{32}$/);",
+                  "  pm.expect(r.event.type).to.eql(\"movie\");",
+                  "  pm.expect(Number.isNaN(Date.parse(r.event.timestamp))).to.eql(false);",
+                  "  pm.expect(r.event.payload).to.deep.eql(JSON.parse(pm.variables.replaceIn(pm.request.body.raw)));",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -633,6 +638,15 @@
                   "pm.test(\"Response has status success\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.status).to.equal(\"success\");",
+                  "});",
+                  "pm.test(\"Kafka coordinates and envelope\", function () {",
+                  "  const r = pm.response.json();",
+                  "  pm.expect(r.partition).to.be.a(\"number\"); pm.expect(r.partition).to.be.at.least(0);",
+                  "  pm.expect(r.offset).to.be.a(\"number\"); pm.expect(r.offset).to.be.at.least(0);",
+                  "  pm.expect(r.event.id).to.match(/^[a-f0-9]{32}$/);",
+                  "  pm.expect(r.event.type).to.eql(\"user\");",
+                  "  pm.expect(Number.isNaN(Date.parse(r.event.timestamp))).to.eql(false);",
+                  "  pm.expect(r.event.payload).to.deep.eql(JSON.parse(pm.variables.replaceIn(pm.request.body.raw)));",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -672,6 +686,15 @@
                   "pm.test(\"Response has status success\", function () {",
                   "    var jsonData = pm.response.json();",
                   "    pm.expect(jsonData.status).to.equal(\"success\");",
+                  "});",
+                  "pm.test(\"Kafka coordinates and envelope\", function () {",
+                  "  const r = pm.response.json();",
+                  "  pm.expect(r.partition).to.be.a(\"number\"); pm.expect(r.partition).to.be.at.least(0);",
+                  "  pm.expect(r.offset).to.be.a(\"number\"); pm.expect(r.offset).to.be.at.least(0);",
+                  "  pm.expect(r.event.id).to.match(/^[a-f0-9]{32}$/);",
+                  "  pm.expect(r.event.type).to.eql(\"payment\");",
+                  "  pm.expect(Number.isNaN(Date.parse(r.event.timestamp))).to.eql(false);",
+                  "  pm.expect(r.event.payload).to.deep.eql(JSON.parse(pm.variables.replaceIn(pm.request.body.raw)));",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -698,11 +721,7 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "pm.test(\"Status code is 200\", function () {",
-                  "    pm.response.to.have.status(200);",
-                  "});"
-                ],
+                "exec": ["pm.test(\"Status code is 200\", function () {", "    pm.response.to.have.status(200);", "});"],
                 "type": "text/javascript"
               }
             }

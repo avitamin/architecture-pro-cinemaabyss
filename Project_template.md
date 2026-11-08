@@ -107,6 +107,35 @@
 Приложите скриншот тестов и скриншот состояния топиков Kafka http://localhost:8090 
 
 
+### Результат задания 2
+
+Реализованы Go proxy и events, Dockerfile обоих сервисов, health-зависимости Compose, unit-тесты и расширенные Postman assertions. Решения: [ADR 011](docs/architecture/decisions/011-movies-traffic-migration.md), [ADR 012](docs/architecture/decisions/012-events-mvp-delivery.md).
+
+Приёмка 2026-11-08, рабочая копия поверх `1f0c2df`, Go 1.25.4, Docker Compose 2.29.1:
+
+| Статус | Проверка и границы |
+|---|---|
+| PASS | `go test -race ./...` и `go vet ./...` отдельно в proxy и events; включая 502/504 без fallback, валидацию, ожидание ack, callback, log-before-commit и отказ записи лога |
+| PASS | Сборка четырёх Go-сервисов в Docker; `docker compose config --quiet` (есть предупреждение об устаревшем `version`) |
+| PASS | Промежуточный Postman: Monolith 11/21, Movies 4/8, Proxy 3/5 (запросы/assertions), 0 ошибок; Events исключён только на промежуточном этапе |
+| PASS | Финальный Postman: 22 запроса, 45 assertions, 0 ошибок; HTML/JUnit в `tests/postman/reports/` |
+| PASS | По 100 запросов каталога: true/0 — 100 monolith; true/50 — 45 movies и 55 monolith; true/100 — 100 movies; false/0 — 100 movies. Возвращено true/50 |
+| PASS | Фильм id=10 создан через Gateway при 0%, прочитан по id при 100%; проверена совместимость общей БД |
+| PASS | Каждый API через Gateway дал 201; movie/user/payment найдены в Kafka UI на partition=0, offset=1 и в consumer-логе с тем же event.id |
+| PASS | Группа cinemaabyss-events: lag=0 по всем трём топикам; запись recovery-20261108 обработана после остановки/запуска events |
+| PASS | При остановленной Kafka валидный запрос дал 500 за менее 0.01 секунды; после запуска брокера новая публикация успешна; сервисы восстановлены |
+| PASS | Два реальных скриншота открыты и визуально проверены |
+| PASS | Перед фиксацией проверены exit=1 при ошибке HTTP-старта и exit=0 по SIGTERM обоих сервисов; health каталога идёт в movies также при 0% миграции |
+| NOT RUN | CI, публикация образов, Kubernetes, Helm, Istio — следующие задания |
+
+Скриншоты: [полная коллекция Postman](docs/evidence/task-2/postman-tests.png), [состояние Kafka UI](docs/evidence/task-2/kafka-topics.png). Скриншот отчёта относится к первому полному успешному запуску; повторная полная приёмка после финальной пересборки также дала 22/45 без ошибок.
+
+Координаты отдельного smoke: movie `9bff1f41152f148a0da1fee3dea6fd1d`, user `b744e6b497b4e6edf0785f2a21c142a4`, payment `8a886265793e1215bc2c220425a14257`. Публикация подтверждена HTTP/Kafka; обработка отдельно подтверждена consumer-логом и offsets. Логи и команды приёмки сохранены локально в `/tmp/cinema-task2-FaCnSd`.
+
+Ограничения среды: стандартный запуск первоначально не прошёл из-за исчерпанного автоматического пула Docker и занятых портов 5432/8000. Для приёмки создана сеть `cinemaabyss-network` с подсетью `10.246.12.0/24`, использован временный override `/tmp/cinema-task2-FaCnSd/network.yml`: external network, PostgreSQL без host-порта, proxy 18000, events 18082. Postman local environment временно указывал эти порты, затем восстановлен. Репозиторный Compose сохраняет предусмотренные порты; запуск без override на этом хосте остаётся BLOCKED до освобождения портов/выбора локального override. Пример повторного запуска: `docker compose -f docker-compose.yml -f /tmp/cinema-task2-FaCnSd/network.yml up -d --build`. Gateway сейчас доступен на `http://localhost:18000`, Kafka UI на `http://localhost:8090`.
+
+Учебный events логирует события и не выполняет денежные операции. Сохраняются один брокер, общая БД и возможность повторных логов. HTTP не идемпотентен, тайм-аут не доказывает отсутствие записи Kafka. Авторизация, Saga, Outbox и задания 3–5 не реализовывались. npm сообщил 26 уязвимостей дерева тестового инструментария (9 moderate, 16 high, 1 critical); автоматическое обновление с изменением версий не выполнялось.
+
 ## Задание 3
 
 Команда начала переезд в Kubernetes для лучшего масштабирования и повышения надежности. 
