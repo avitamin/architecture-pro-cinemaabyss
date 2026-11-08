@@ -497,6 +497,33 @@ https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
 
 
+### Результат задания 4
+
+Дата: 2026-11-08. Основа — `a8cbf5ccabf32fa87be48e6229ac042ac28cd47a`, ветка `cinema`; проверена рабочая копия с изменениями Helm и документации, без commit/push. Образы приложений остались `sha-27dac03` (исходники `27dac03`); четыре OCI index digest повторно совпали с таблицей задания 3 при анонимном чтении GHCR.
+
+Использован согласованный отдельный профиль/context `cinemaabyss-task4`, IP `192.168.194.2`, Docker network `cinemaabyss-task4`. Raw-установка задания 3 сохранена. Current-context остался `kind-avatar`. Helm `v3.21.0`, kubectl `v1.36.1`, Minikube `v1.39.0`, Kubernetes `v1.37.0`, Docker client/server `27.1.2`; Node `v24.15.0`, npm `12.2.0`. Ingress controller и standard StorageClass подготовлены отдельно от application chart.
+
+Чарт содержит семь компонентов: PostgreSQL, ZooKeeper, Kafka и четыре приложения. Заполнены proxy/events, исправлены DNS/env, registry JSON, namespace через `.Release.Namespace`, mount ZooKeeper и single-broker настройки Kafka; добавлены TLS и rollout приложений по checksum ConfigMap. [Инструкция установки и обновления](src/kubernetes/helm/README.md).
+
+| Статус | Фактическая проверка и результат |
+| --- | --- |
+| PASS | `helm lint --strict`, default render и overrides namespace/persistence/disabled/0%; 21 ресурс, selectors/references/ingress ports, probes/PORT, безопасный registry JSON, детерминированный checksum; SQL совпал с raw после удаления краевого whitespace |
+| PASS | `kubectl apply --dry-run=server` rendered YAML и `helm install --dry-run=server --hide-secret` |
+| PASS | Первая установка `helm install --wait --timeout 10m` завершилась `deployed`; все семь Pods Ready, три PVC Bound; endpoints и Kafka broker API доступны |
+| PASS | Свежая PostgreSQL: 5 movies до Newman; HTTPS с `--resolve cinemaabyss.example.com:443:192.168.194.2`: HTTP 200, непустой массив из пяти фильмов |
+| PASS | Существующий контейнерный Newman через сеть task4 и `--add-host`: 22 requests, 45 assertions, 0 failures; отчёты HTML/JUnit сохранены вне Git |
+| PASS | Upgrade с `--reset-values` на 0%, затем defaults 100%: UID proxy менялся без ручного restart, по 20 HTTPS GET дали 200; новые логи только monolith и movies соответственно. Финальная ревизия 3 deployed, true/100 |
+
+После последовательного rolling restart ZooKeeper и Kafka подтверждены прежний cluster ID и UID трёх PVC, Ready Kafka без `InconsistentClusterIdException`, наличие трёх топиков. Затем через HTTPS опубликованы movie/user/payment: каждый ответ 201 с `status=success`, event ID и partition/offset. Для каждого ID сопоставлены type/topic/partition/offset со строкой `event_processed`; consumer group `cinemaabyss-events` достигла lag=0 по всем трём топикам в пределах 120 секунд. Это PASS обработки отдельно от ack публикации; exactly-once и HTTP-дедупликация не заявляются.
+
+Реальные скриншоты терминала проверены визуально: [Helm status/history, Pods и PVC](docs/evidence/task-4/helm-deployment.png), [HTTPS URL, новый IP, HTTP 200 и JSON](docs/evidence/task-4/movies-response.png). После Newman в ответе также видны созданные им тестовые фильмы.
+
+Профиль task4 сохранён для задания 5. `.agents/project-state.md` — BLOCKED для обновления: каталог только для чтения в текущей среде; актуальное состояние задания находится в этом отчёте. Инструкция установки и навигация README обновлены. Проверки Markdown, локальных ссылок и `git diff --check` — PASS.
+
+При первом старте monolith/movies получили `connection refused` к ещё запускавшейся PostgreSQL, Kafka — `ZooKeeperClientTimeoutException` к ещё запускавшемуся ZooKeeper. Начальная проверка HTTPS дала 502, включая ограниченную серию из 30 попыток; после штатного восстановления movies отдельное ожидание Ready и запрос дали 200. Первая Helm-установка не завершалась ошибкой; ранние рестарты и недоступность не скрыты. Непрерывная доступность и HA не заявляются.
+
+HTTPS использует учебный сертификат ingress controller и явный `--insecure`. Домен на хосте продолжает вести в task3; поэтому в приёмке использованы новый IP через resolve/add-host. CI для текущего diff — NOT RUN; результаты CI задания 3 не являются проверкой этого чарта. Istio — NOT RUN, относится к заданию 5.
+
 # Задание 5
 Компания планирует активно развиваться и для повышения надежности, безопасности, реализации сетевых паттернов типа Circuit Breaker и канареечного деплоя вам как архитектору необходимо развернуть istio и настроить circuit breaker для monolith и movies сервисов.
 
