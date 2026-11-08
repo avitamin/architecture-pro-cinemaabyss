@@ -351,25 +351,76 @@ cat .docker/config.json | base64
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
 
-### Результат задания 3 — локальная подготовка
+### Результат задания 3
 
-На 2026-11-08 подготовлены изменения поверх `51278615d1b96d04a93dff6378f5dad4e2a30c11`. Ниже зафиксированы проверки локальной подготовки до CI и Kubernetes-приёмки.
+Дата приёмки: 2026-11-08. Реализация и образы проверены на коммите `27dac03ff9eca36a03a46be2ff9edfa20d2070ac` ветки `cinema`. Последующая фиксация этого отчёта и скриншотов не меняет SHA проверенных образов.
 
-- [Build workflow](.github/workflows/docker-build-push.yml): push в `cinema`, четыре образа GHCR, отдельные cache scopes.
-- [API workflow](.github/workflows/api-tests.yml): единственный Compose build/start, ограниченное ожидание HTTP 200, полная Docker-коллекция по умолчанию, HTML/JUnit artifacts и диагностика ошибок. Test image использует `npm ci`.
-- [Kubernetes](src/kubernetes/): заполнены Deployment/Service proxy и events, настроены ingress HTTP/HTTPS и маршруты, URL/Kafka ConfigMap, образы собственного GHCR с tag `cinema`, offsets replication factor 1 и heap Kafka 256–512Mi. Registry Secret содержит только пустой валидный шаблон; private pull требует отдельных credentials.
+#### CI и registry
 
-| Статус | Проверка и предел доказательства |
+Оба workflow запущены событием push и завершились успешно на одном SHA:
+
+- [Docker Build and Push — success](https://github.com/avitamin/architecture-pro-cinemaabyss/actions/runs/42472236903), [конфигурация](.github/workflows/docker-build-push.yml).
+- [API Tests — success](https://github.com/avitamin/architecture-pro-cinemaabyss/actions/runs/42472236935), [конфигурация](.github/workflows/api-tests.yml): 22 requests, 45 assertions, 0 failures; HTML/JUnit доступны в artifact `api-test-reports` этого run.
+
+В `ghcr.io/avitamin/architecture-pro-cinemaabyss/` опубликованы четыре образа. Для каждого теги `sha-27dac03` и `cinema` указывали на одинаковый OCI index digest при проверке. Анонимное чтение registry проверено с пустым Docker config; PAT и изменение package visibility не потребовались.
+
+| Образ | OCI index digest |
 | --- | --- |
-| PASS | Разбор двух workflow и raw Kubernetes YAML, `bash -n` shell-блоков, соответствие selectors/ports, четыре build context/cache scopes, `git diff --check` |
-| PASS | `docker compose config --quiet` со стандартной конфигурацией и явным локальным `COMPOSE_FILE`; остаётся предупреждение об устаревшем `version` |
-| PASS | `docker compose build monolith movies-service proxy-service events-service`; использованы доступные кэшированные слои |
-| PASS | Сборка test image с `npm ci`, дополнительно из чистого контекста без локальных node_modules |
-| PASS | Контейнерный Newman с `--environment docker` на существующем Compose-стеке: 22 requests, 45 assertions, 0 failures, exit 0. Стек не пересоздавался; тесты добавили учебные данные. HTML/JUnit сохранены локально |
-| NOT RUN | Оба workflow на одном новом SHA и проверка GHCR tags/digests — следующий этап после публикации |
-| NOT RUN | Создание Minikube, server-side schema validation, deploy, HTTPS, Kubernetes Postman, распределение 0/100, event_processed/lag и реальные скриншоты — следуют после успешного CI |
+| `monolith` | `sha256:9151e42828908857ce403e2f2840669c96c9379bfb14e772b23efec3f4d8cade` |
+| `movies-service` | `sha256:51c24142b2e3a1db5ce33c03504247425ac57767bf9136839ea7537ae5e54df9` |
+| `events-service` | `sha256:eeb04c90cd8a8bbef05318dea6fdbcc1a341d7f2981a1e712a861c195c8c58ef` |
+| `proxy-service` | `sha256:70b94c61356552865bcb588dfcc45820703785ca619845e8129da21a3206b7c7` |
 
-Локальный Newman подтверждает HTTP API существующего Compose-стека; обработка consumer в этом запуске отдельно не проверялась. Образы ещё не опубликованы. Текущий Kubernetes context `kind-avatar` не менялся. Helm и Istio не изменялись.
+Workflow собирает четыре сервиса с отдельными cache scopes. API workflow один раз запускает Compose с build, ограниченно ожидает HTTP 200, сохраняет код выхода Newman, отчёты и диагностику ошибок. Test image устанавливает зависимости через `npm ci`.
+
+#### Kubernetes и приёмка
+
+Использованы raw [Kubernetes-манифесты](src/kubernetes/), Minikube v1.39.0, отдельные profile/context `cinemaabyss-task3`, Kubernetes v1.37.0, Docker driver, containerd 2.3.4, 4 CPU и 6144 MiB RAM. Кластер создан с `--keep-context`; активный context пользователя остался `kind-avatar`. Фактическая Docker-сеть — `cinemaabyss-task3`, IP узла — `192.168.193.2`. Все команды deploy выполнялись с явным context.
+
+| Статус | Проверка и наблюдаемый результат |
+| --- | --- |
+| PASS | До публикации: YAML workflow/raw Kubernetes, `bash -n` shell-блоков, selectors/ports, `git diff --check`; стандартный Compose config и явный локальный override |
+| PASS | Локальная сборка четырёх сервисов и test image с `npm ci`; дополнительно чистый build context без локальных node_modules. Локальный Compose Newman: 22 requests / 45 assertions / 0 failures |
+| PASS | `kubectl --context=cinemaabyss-task3 apply --dry-run=server` для каждого применённого raw-манифеста, затем последовательный deploy; рекурсивное применение всей папки не использовалось |
+| PASS | PostgreSQL, ZooKeeper, Kafka и четыре приложения: 7/7 Pods Ready, 0 restarts при финальной проверке. Все три PVC Bound, init SQL выполнен; до API-тестов в таблице movies было 5 фильмов |
+| PASS | Broker API отвечает; существуют `movie-events`, `user-events`, `payment-events`. Kafka offsets replication factor 1, heap 256–512Mi при limit 1Gi |
+| PASS | Фактические imageID всех четырёх прикладных Pods сопоставлены с registry artifacts проверенного SHA |
+| PASS | HTTPS `https://cinemaabyss.example.com/api/movies`: HTTP/2 200, непустой JSON-массив; до Postman — 5 фильмов. Запрос выполнен с `--resolve`, `--noproxy` и `--insecure` для локального self-signed сертификата |
+| PASS | Полная Postman-коллекция в контейнере, сеть Minikube и `--add-host`, environment `kubernetes`: 22 requests / 45 assertions / 0 failures, exit 0 |
+| PASS | После добавления пользователем hosts-записи: буквальный `npm run test:kubernetes` на хосте, 22 requests / 45 assertions / 0 failures, exit 0. Proxy-переменные отключены только для этого процесса; test environments не менялись |
+| PASS | `GRADUAL_MIGRATION=true`, 0%: 20 GET каталога вернули 200 и `upstream=monolith`; 100%: 20 GET вернули 200 и `upstream=movies`. Health-маршруты исключены из выборки. Финальные файл ConfigMap, применённый ConfigMap и Pod proxy возвращены в true/100 |
+| PASS | Три дополнительных POST через ingress дали 201, `status=success`, event ID и Kafka coordinates. Те же ID найдены в `event_processed` с совпадающими type/topic/partition/offset; consumer group `cinemaabyss-events` имеет lag=0 по всем трём топикам |
+| PASS | Два реальных скриншота окон терминала сняты через X11, открыты и визуально проверены; секреты отсутствуют |
+
+Корреляция дополнительных POST и consumer logs: для всех трёх partition=0 и offset=1.
+
+| Тип / topic | Event ID из HTTP-ответа и `event_processed` |
+| --- | --- |
+| movie / `movie-events` | `6c93ee368c8be8cfd88c90fa95d013c3` |
+| user / `user-events` | `d88593badb6d1fe4125f4c2d359a9550` |
+| payment / `payment-events` | `77819e7699a9e532096d7079732d38ac` |
+
+HTTP 201 подтверждает публикацию; обработка подтверждена отдельно по логам. На финальном измерении после двух Kubernetes-запусков коллекции и дополнительных POST current-offset=log-end-offset=3 для каждого топика, lag=0. Это не гарантия exactly-once; HTTP-повторы не дедуплицируются.
+
+#### Скриншоты
+
+[HTTPS-ответ каталога](docs/evidence/task-3/movies-response.png) показывает фактический запрос и JSON фильмов после первого запуска Kubernetes-коллекции.
+
+![HTTPS response with movies](docs/evidence/task-3/movies-response.png)
+
+[Обработка событий](docs/evidence/task-3/event-processing.png) показывает реальные `event_processed` и consumer group lag после API-проверок.
+
+![Kafka event processing and consumer lag](docs/evidence/task-3/event-processing.png)
+
+#### Ограничения
+
+HTTPS использует локальный self-signed сертификат ingress и `curl --insecure`; доверенная публичная TLS-цепочка не проверялась. HTTP сохранён для существующей Postman environment. Более специфичный ingress Prefix `/api/events` направляет запросы непосредственно в events, каталог проходит через proxy.
+
+Сразу после одного успешного rolling restart proxy первый запрос через ingress получил 503. Повторное измерение выполнялось после ограниченного ожидания доступности ingress и прошло; непрерывная доступность во время rollout не подтверждена. Процент читается при старте: необходимы apply ConfigMap и rolling restart proxy.
+
+Первичная загрузка Minikube была медленной; зеркало preload GitHub вернуло 503, использован официальный Google Storage. Предупреждение о `registry.k8s.io` при подготовке не помешало фактическому pull и запуску ingress. Для доступа с хоста к IP/домену Minikube использован локальный обход proxy, без глобальных изменений окружения. Пользователь добавил `192.168.193.2 cinemaabyss.example.com` в `/etc/hosts`; существующие сервисы и сети не останавливались.
+
+Сохранены один broker, ZooKeeper и общая PostgreSQL. Registry Secret — пустой валидный шаблон для доступных образов. Учебные DB credentials не предназначены для production. Helm, Istio, Circuit Breaker и бизнес-логика сервисов не менялись. HTML/JUnit и технические логи сохранены отдельно от скриншотов и не добавлены в Git.
 
 ## Задание 4
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
