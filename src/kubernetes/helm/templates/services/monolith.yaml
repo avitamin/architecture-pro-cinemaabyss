@@ -23,6 +23,9 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
+        {{- if .Values.istio.enabled }}
+        sidecar.istio.io/inject: "true"
+        {{- end }}
         app: monolith
     spec:
       containers:
@@ -72,7 +75,8 @@ spec:
   selector:
     app: monolith
   ports:
-  - port: {{ .Values.monolith.service.port }}
+  - name: http
+    port: {{ .Values.monolith.service.port }}
     targetPort: {{ .Values.monolith.service.targetPort }}
   type: {{ .Values.monolith.service.type }}
 {{- end }}

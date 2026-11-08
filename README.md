@@ -228,4 +228,6 @@ Events валидирует JSON и публикует envelope синхронн
 
 Запуск: `docker compose up -d --build`. Проверки: `cd tests/postman && npm install && npm run test:local`. Остановка: `docker compose stop`.
 
-Фактическая приёмка и ограничения хоста: [результат задания 2](Project_template.md#результат-задания-2). Решения: [миграция трафика](docs/architecture/decisions/011-movies-traffic-migration.md), [доставка событий](docs/architecture/decisions/012-events-mvp-delivery.md). Результаты Kubernetes и Helm приведены в [задании 3](Project_template.md#результат-задания-3) и [задании 4](Project_template.md#результат-задания-4). Инструкция: [Helm README](src/kubernetes/helm/README.md). Следующий этап — Istio.
+Фактическая приёмка и ограничения хоста: [результат задания 2](Project_template.md#результат-задания-2). Решения: [миграция трафика](docs/architecture/decisions/011-movies-traffic-migration.md), [доставка событий](docs/architecture/decisions/012-events-mvp-delivery.md). Результаты Kubernetes и Helm приведены в [задании 3](Project_template.md#результат-задания-3) и [задании 4](Project_template.md#результат-задания-4). Инструкция: [Helm README](src/kubernetes/helm/README.md).
+
+Задание 5: [результаты Circuit Breaker и реальные скриншоты](Project_template.md#результат-задания-5), [инструкция Istio/Fortio](src/kubernetes/istio/README.md).

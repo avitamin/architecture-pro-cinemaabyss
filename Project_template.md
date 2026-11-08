@@ -596,3 +596,38 @@ kubectl delete namespace istio-system
 kubectl delete all --all -n cinemaabyss
 kubectl delete namespace cinemaabyss
 ```
+
+## Результат задания 5
+
+2026-11-08, проверялась рабочая копия поверх `79aadcb` (задание 4), до её коммита и публикации. Контур — только `cinemaabyss-task4`, namespace `cinemaabyss`, Kubernetes 1.37.0. Установлены Helm releases istio-base, istiod, istio-ingressgateway версии 1.31.4; приложение обновлено до revision 6, итоговая миграция true/100. [Воспроизводимая инструкция](src/kubernetes/istio/README.md), [две DestinationRule](src/kubernetes/circuit-breaker-config.yaml).
+
+PASS runtime: monolith, movies, proxy и Fortio имеют Ready sidecar 1.31.4; xDS получен. Политика проверена в config dump обоих outbound clusters Fortio и proxy. Gateway ClusterIP установлен после готовности istiod; существующий HTTPS ingress-nginx сохранён. Pod opt-in заменяет namespace-wide injection, чтобы не перезапускать хранилища и не включать их в mesh.
+
+Отдельные реальные серии Fortio 1.76.0: `-c 50 -qps 0 -n 500 -timeout 3s -loglevel Warning`, путь `/api/movies`:
+
+| Backend / URL | HTTP 200 / 503 / прочие | overflow до → после (delta) | Recovery | Статус |
+|---|---|---|---|---|
+| `http://monolith:8080/api/movies` | 18 / 482 / 0 | 0 → 481 (+481) | 20/20 HTTP 200, delta=0 | PASS |
+| `http://movies-service:8081/api/movies` | 18 / 482 / 0 | 0 → 482 (+482) | 20/20 HTTP 200, delta=0 | PASS |
+
+Начало экспериментов: 12:54:37Z и 12:54:58Z. Одиночные запросы вернули непустые JSON-массивы; спокойные серии до установки политики и перед нагрузкой — по 20/20 HTTP 200. Access log подтверждает `503 UO` (Upstream Overflow — превышение лимита upstream), `upstream_reset_before_response_started{overflow}`. Сравнивался `upstream_rq_pending_overflow` одного Envoy, UID/restarts всех Pods за время экспериментов стабильны; восстановление без снятия политики или перезапуска. Разница между числом 503 и overflow допустима: это разные счётчики. Указанный в исходном примере `pending_total` считает ожидания соединения, а не срабатывания Circuit Breaker.
+
+Реальные захваты окон терминала с извлечёнными результатами завершённых запусков; числа не редактировались:
+
+![Monolith: Fortio, Envoy overflow и recovery](docs/evidence/task-5/monolith-circuit-breaker.png)
+
+![Movies: Fortio, Envoy overflow и recovery](docs/evidence/task-5/movies-circuit-breaker.png)
+
+| Проверка | Результат |
+|---|---|
+| Helm strict lint default/overlay и charts Istio, server dry-run приложения/политик | PASS, статические проверки отдельно от runtime |
+| HTTPS ingress при 0% / 100% | PASS: по 10/10 HTTP 200, непустые массивы; Go-логи proxy подтверждают monolith / movies |
+| Postman через task4 network и явный add-host | PASS: 22 requests, 45 assertions, 0 failures; HTTP runner дополнен отдельными HTTPS GET |
+| Stateful окружение | PASS: PostgreSQL/Kafka/ZooKeeper без смены UID/restarts, три PVC с прежними UID и Bound |
+| Events | PASS: injection не изменил Pod; при проверке 0/100 обновился штатно из-за общей ConfigMap |
+| Istio analyze | PASS без ошибок; Info IST0102 (осознанный Pod opt-in), IST0118 для портов events/Kafka/ZooKeeper вне mesh |
+| YAML, Markdown, локальные ссылки и whitespace | PASS: разбор новых YAML/Markdown, проверка существования локальных ссылок, `git diff --check`; новые файлы также проверены отдельно |
+| Отдельная повторная Kafka consumer-приёмка и CI | NOT RUN: не выполнялись в задании 5; HTTP events не считается доказательством consumer |
+| Обновление `.agents/project-state.md` | BLOCKED: каталог инструкций доступен только для чтения; актуальный результат здесь |
+
+Ограничения: учебные лимиты 1/1/1 на каждый вызывающий Envoy, одна реплика, без обещания нулевого downtime. Outlier detection и канареечный rollout не проверялись. Ресурсы оставлены работающими для проверки; никакие команды удаления из примера задания не выполнялись.

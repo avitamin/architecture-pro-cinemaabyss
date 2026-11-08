@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fortio
+  labels:
+    app: fortio
+    service: fortio
+  namespace: cinemaabyss
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: fortio
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortio-deploy
+  namespace: cinemaabyss
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fortio
+  template:
+    metadata:
+      annotations:
+        proxy.istio.io/config: "proxyStatsMatcher:\n  inclusionPrefixes:\n  - \"cluster.outbound\"\
+          \n  - \"cluster_manager\"\n  - \"listener_manager\"\n  - \"server\"\n  -\
+          \ \"cluster.xds-grpc\""
+      labels:
+        app: fortio
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name: fortio
+        image: docker.io/fortio/fortio:1.76.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http-fortio
+        - containerPort: 8079
+          name: grpc-ping
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 256Mi

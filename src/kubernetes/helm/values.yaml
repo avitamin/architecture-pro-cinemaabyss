@@ -185,3 +185,7 @@ config:
   # Strangler Fig configuration
   gradualMigration: "true"
   moviesMigrationPercent: "100"
+
+# Optional sidecar injection; requires Istio installed first.
+istio:
+  enabled: false

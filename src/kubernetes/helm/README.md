@@ -41,3 +41,7 @@ helm --kube-context cinemaabyss-task4 upgrade cinemaabyss src/kubernetes/helm \
 ```
 
 Одна реплика и один Kafka broker не обеспечивают HA или непрерывную доступность при rollout. HTTP 201 events означает ack публикации; обработку проверяют отдельно по `event_processed` и consumer lag.
+
+## Опциональный Istio
+
+`istio.enabled` по умолчанию `false`. После установки control plane передавайте `-f src/kubernetes/helm/values-istio.yaml` при **каждом** upgrade из корня репозитория: overlay включает sidecar у monolith, movies и proxy. Без overlay chart пригоден для работы без Istio. Политики имеют отдельного владельца и применяются raw-манифестом. [Установка, Fortio и ограничения](../istio/README.md).
