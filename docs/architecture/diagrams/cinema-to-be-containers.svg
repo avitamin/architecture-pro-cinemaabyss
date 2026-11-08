@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2410" viewBox="0 0 2400 2410" role="img" aria-labelledby="title desc">
+  <title id="title">Кинобездна — To-Be, C4 Container diagram</title>
+  <desc id="desc">Пять доменов, единый API Gateway, отдельный Rating Worker, собственные хранилища и Kafka. Стрелки показывают инициатора обращения, включая чтение брокера потребителями.</desc>
+  <defs>
+    <marker id="arrow-http" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="9" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 5 L 0 10 z" fill="#2463a4" />
+    </marker>
+    <marker id="arrow-sql" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="9" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 5 L 0 10 z" fill="#536274" />
+    </marker>
+    <marker id="arrow-event" viewBox="0 0 12 10" refX="11" refY="5" markerWidth="9" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 5 L 0 10 z" fill="#7944a4" />
+    </marker>
+  </defs>
+  <rect width="2400" height="2410" fill="#ffffff" />
+  <text x="55" y="62" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="34" font-weight="400" text-anchor="start">Кинобездна — целевая архитектура</text>
+  <text x="55" y="103" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start">C4 · Container diagram · конечное состояние после выделения доменов</text>
+  <text x="650" y="167" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="22" font-weight="400" text-anchor="start">Обозначения</text>
+  <path d="M 650 205 L 735 205" stroke="#2463a4" stroke-width="3" stroke-dasharray="none" marker-end="url(#arrow-http)" />
+  <text x="755" y="205" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Синхронное обращение HTTP</text>
+  <path d="M 650 240 L 735 240" stroke="#536274" stroke-width="3" stroke-dasharray="none" marker-end="url(#arrow-sql)" />
+  <text x="755" y="240" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Доступ владельца к данным SQL</text>
+  <path d="M 650 275 L 735 275" stroke="#7944a4" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#arrow-event)" />
+  <text x="755" y="275" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Асинхронные события через Kafka</text>
+  <text x="1470" y="175" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Стрелка: инициатор → вызываемый контейнер.</text>
+  <text x="1470" y="201" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Потребители сами читают Kafka; направление</text>
+  <text x="1470" y="227" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">стрелки не означает направление потока событий.</text>
+  <rect x="35" y="330" width="2330" height="1970" rx="9" fill="#fbfcfe" stroke="#667b91" stroke-width="2" stroke-dasharray="12 8" />
+  <text x="645" y="363" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="21" font-weight="400" text-anchor="start">Кинобездна [Software System]</text>
+  <rect x="620" y="385" width="1030" height="260" rx="8" fill="#f0f5fa" stroke="#b3c3d4" stroke-width="2" />
+  <text x="645" y="421" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" text-anchor="start">Домен Users</text>
+  <rect x="620" y="715" width="1030" height="260" rx="8" fill="#f0f5fa" stroke="#b3c3d4" stroke-width="2" />
+  <text x="645" y="751" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" text-anchor="start">Домен Movies</text>
+  <rect x="620" y="1045" width="1030" height="260" rx="8" fill="#f0f5fa" stroke="#b3c3d4" stroke-width="2" />
+  <text x="645" y="1081" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" text-anchor="start">Домен Payments</text>
+  <rect x="620" y="1375" width="1030" height="260" rx="8" fill="#f0f5fa" stroke="#b3c3d4" stroke-width="2" />
+  <text x="645" y="1411" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" text-anchor="start">Домен Subscriptions</text>
+  <rect x="620" y="1705" width="1030" height="505" rx="8" fill="#f0f5fa" stroke="#b3c3d4" stroke-width="2" />
+  <text x="645" y="1741" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="20" font-weight="700" text-anchor="start">Домен Viewer Activity</text>
+  <path d="M 250 280 L 250 420" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="client_http" d="M 250 280 L 250 420" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="viewer" data-target="gateway" data-label="Работает с системой / HTTPS / JSON" />
+  <path d="M 420 555 L 490 555 L 490 527 L 650 527" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="route_users" d="M 420 555 L 490 555 L 490 527 L 650 527" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="gateway" data-target="users" data-label="Профиль / HTTP / JSON" />
+  <path d="M 420 555 L 490 555 L 490 857 L 650 857" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="route_movies" d="M 420 555 L 490 555 L 490 857 L 650 857" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="gateway" data-target="movies" data-label="Каталог / HTTP / JSON" />
+  <path d="M 420 555 L 490 555 L 490 1187 L 650 1187" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="route_payments" d="M 420 555 L 490 555 L 490 1187 L 650 1187" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="gateway" data-target="payments" data-label="Оплата / HTTP / JSON" />
+  <path d="M 420 555 L 490 555 L 490 1517 L 650 1517" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="route_subscriptions" d="M 420 555 L 490 555 L 490 1517 L 650 1517" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="gateway" data-target="subscriptions" data-label="Подписки / HTTP / JSON" />
+  <path d="M 420 555 L 490 555 L 490 1852 L 650 1852" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="route_activity" d="M 420 555 L 490 555 L 490 1852 L 650 1852" fill="none" stroke="#2463a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-http)" data-source="gateway" data-target="activity" data-label="Активность / HTTP / JSON" />
+  <path d="M 990 527 L 1250 527" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_users" d="M 990 527 L 1250 527" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="users" data-target="users_db" data-label="Читает / пишет / SQL" />
+  <path d="M 990 857 L 1250 857" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_movies" d="M 990 857 L 1250 857" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="movies" data-target="movies_db" data-label="Каталог и проекция / SQL" />
+  <path d="M 990 1187 L 1250 1187" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_payments" d="M 990 1187 L 1250 1187" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="payments" data-target="payments_db" data-label="Платежи и Outbox / SQL" />
+  <path d="M 990 1517 L 1250 1517" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_subscriptions" d="M 990 1517 L 1250 1517" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="subscriptions" data-target="subscriptions_db" data-label="Подписки и Outbox / SQL" />
+  <path d="M 820 1935 L 820 2105 L 950 2105" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_activity" d="M 820 1935 L 820 2105 L 950 2105" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="activity" data-target="activity_db" data-label="Просмотры, оценки / SQL" />
+  <path d="M 1430 1935 L 1430 1980 L 1220 1980 L 1220 2020" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="store_worker" d="M 1430 1935 L 1430 1980 L 1220 1980 L 1220 2020" fill="none" stroke="#536274" stroke-width="3" stroke-linejoin="round" stroke-dasharray="none" marker-end="url(#arrow-sql)" data-source="rating_worker" data-target="activity_db" data-label="Читает оценки; / пишет расчёт [SQL]" />
+  <path d="M 820 935 L 820 1010 L 1770 1010 L 1770 1170 L 1900 1170" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="ratings_to_movies" d="M 820 935 L 820 1010 L 1770 1010 L 1770 1170 L 1900 1170" fill="none" stroke="#7944a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 6" marker-end="url(#arrow-event)" data-source="movies" data-target="kafka" data-label="Читает готовые рейтинги [Kafka]" />
+  <path d="M 820 1265 L 820 1340 L 1740 1340 L 1740 1260 L 1900 1260" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="purchase_payments" d="M 820 1265 L 820 1340 L 1740 1340 L 1740 1260 L 1900 1260" fill="none" stroke="#7944a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 6" marker-end="url(#arrow-event)" data-source="payments" data-target="kafka" data-label="Публикует оплаты; читает результаты активации [Kafka]" />
+  <path d="M 820 1595 L 820 1670 L 1770 1670 L 1770 1370 L 1900 1370" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="purchase_subscriptions" d="M 820 1595 L 820 1670 L 1770 1670 L 1770 1370 L 1900 1370" fill="none" stroke="#7944a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 6" marker-end="url(#arrow-event)" data-source="subscriptions" data-target="kafka" data-label="Читает оплаты; публикует результаты активации [Kafka]" />
+  <path d="M 650 1910 L 595 1910 L 595 2265 L 1820 2265 L 1820 1460 L 1900 1460" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="rating_changes" d="M 650 1910 L 595 1910 L 595 2265 L 1820 2265 L 1820 1460 L 1900 1460" fill="none" stroke="#7944a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 6" marker-end="url(#arrow-event)" data-source="activity" data-target="kafka" data-label="Публикует изменения оценок [Kafka / Outbox]" />
+  <path d="M 1610 1852 L 1860 1852 L 1860 1510 L 1900 1510" fill="none" stroke="#fbfcfe" stroke-width="8" stroke-linejoin="round" />
+  <path id="rating_calculation" d="M 1610 1852 L 1860 1852 L 1860 1510 L 1900 1510" fill="none" stroke="#7944a4" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 6" marker-end="url(#arrow-event)" data-source="rating_worker" data-target="kafka" data-label="Читает изменения; / публикует рейтинг / [Kafka / Outbox]" />
+  <g id="viewer" data-type="person" data-domain="">
+    <rect x="80" y="125" width="340" height="155" rx="10" fill="#253d52" stroke="#304d67" stroke-width="2" />
+    <text x="250.0" y="160" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Пользователь</text>
+    <text x="250.0" y="187" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Person]</text>
+    <text x="250.0" y="221" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Каталог, оценки, просмотры,</text>
+    <text x="250.0" y="246" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">покупка и состояние подписки</text>
+  </g>
+  <g id="gateway" data-type="app" data-domain="">
+    <rect x="80" y="420" width="340" height="270" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="250.0" y="455" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">API Gateway</text>
+    <text x="250.0" y="482" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go / own proxy]</text>
+    <text x="250.0" y="516" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Единый HTTP-вход; маршруты</text>
+    <text x="250.0" y="541" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Проверки личности и API-прав</text>
+    <text x="250.0" y="566" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Логи и метрики запросов</text>
+    <text x="250.0" y="591" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Выборочный кэш — по политике</text>
+  </g>
+  <g id="users" data-type="app" data-domain="Users">
+    <rect x="650" y="450" width="340" height="155" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="820.0" y="485" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Users API</text>
+    <text x="820.0" y="512" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go]</text>
+    <text x="820.0" y="546" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Учётные записи и профили</text>
+    <text x="820.0" y="571" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Владелец идентификации</text>
+  </g>
+  <g id="users_db" data-type="db" data-domain="Users">
+    <rect x="1250" y="450" width="360" height="155" rx="10" fill="#dceaf5" stroke="#304d67" stroke-width="2" />
+    <text x="1430.0" y="485" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Users DB</text>
+    <text x="1430.0" y="512" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1430.0" y="546" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Аккаунты, профиль</text>
+    <text x="1430.0" y="571" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Учётные данные</text>
+  </g>
+  <g id="movies" data-type="app" data-domain="Movies">
+    <rect x="650" y="780" width="340" height="155" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="820.0" y="815" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Movies API</text>
+    <text x="820.0" y="842" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go]</text>
+    <text x="820.0" y="876" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Каталог и карточки фильмов</text>
+    <text x="820.0" y="901" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Потребитель готовых рейтингов</text>
+  </g>
+  <g id="movies_db" data-type="db" data-domain="Movies">
+    <rect x="1250" y="780" width="360" height="155" rx="10" fill="#dceaf5" stroke="#304d67" stroke-width="2" />
+    <text x="1430.0" y="815" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Movies DB</text>
+    <text x="1430.0" y="842" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1430.0" y="876" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Фильмы, жанры</text>
+    <text x="1430.0" y="901" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Проекция рейтинга и её версия</text>
+  </g>
+  <g id="payments" data-type="app" data-domain="Payments">
+    <rect x="650" y="1110" width="340" height="155" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="820.0" y="1145" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Payments API</text>
+    <text x="820.0" y="1172" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go]</text>
+    <text x="820.0" y="1206" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Денежные операции и статусы</text>
+    <text x="820.0" y="1231" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Участник саги; Outbox relay</text>
+  </g>
+  <g id="payments_db" data-type="db" data-domain="Payments">
+    <rect x="1250" y="1110" width="360" height="155" rx="10" fill="#dceaf5" stroke="#304d67" stroke-width="2" />
+    <text x="1430.0" y="1145" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Payments DB</text>
+    <text x="1430.0" y="1172" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1430.0" y="1206" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Платежи и ход покупки</text>
+    <text x="1430.0" y="1231" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Outbox, отметки обработки</text>
+  </g>
+  <g id="subscriptions" data-type="app" data-domain="Subscriptions">
+    <rect x="650" y="1440" width="340" height="155" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="820.0" y="1475" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Subscriptions API</text>
+    <text x="820.0" y="1502" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go]</text>
+    <text x="820.0" y="1536" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Тариф, период и право доступа</text>
+    <text x="820.0" y="1561" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Активация; Outbox relay</text>
+  </g>
+  <g id="subscriptions_db" data-type="db" data-domain="Subscriptions">
+    <rect x="1250" y="1440" width="360" height="155" rx="10" fill="#dceaf5" stroke="#304d67" stroke-width="2" />
+    <text x="1430.0" y="1475" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Subscriptions DB</text>
+    <text x="1430.0" y="1502" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1430.0" y="1536" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Подписки, периоды доступа</text>
+    <text x="1430.0" y="1561" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Outbox, отметки обработки</text>
+  </g>
+  <g id="activity" data-type="app" data-domain="Viewer Activity">
+    <rect x="650" y="1770" width="340" height="165" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="820.0" y="1805" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Viewer Activity API</text>
+    <text x="820.0" y="1832" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go]</text>
+    <text x="820.0" y="1866" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Просмотры, оценки и отзывы</text>
+    <text x="820.0" y="1891" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Запись изменений; Outbox relay</text>
+  </g>
+  <g id="rating_worker" data-type="app" data-domain="Viewer Activity">
+    <rect x="1250" y="1770" width="360" height="165" rx="10" fill="#176395" stroke="#304d67" stroke-width="2" />
+    <text x="1430.0" y="1805" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Rating Worker</text>
+    <text x="1430.0" y="1832" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Go worker]</text>
+    <text x="1430.0" y="1866" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Пересчёт затронутых фильмов</text>
+    <text x="1430.0" y="1891" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Публикация рейтинга; Outbox relay</text>
+  </g>
+  <g id="activity_db" data-type="db" data-domain="Viewer Activity">
+    <rect x="950" y="2020" width="360" height="170" rx="10" fill="#dceaf5" stroke="#304d67" stroke-width="2" />
+    <text x="1130.0" y="2055" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Viewer Activity DB</text>
+    <text x="1130.0" y="2082" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1130.0" y="2116" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Просмотры, оценки, отзывы</text>
+    <text x="1130.0" y="2141" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Расчёты, версии, Outbox</text>
+    <text x="1130.0" y="2166" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Отметки обработки событий</text>
+  </g>
+  <g id="kafka" data-type="broker" data-domain="">
+    <rect x="1900" y="1100" width="410" height="440" rx="10" fill="#644087" stroke="#304d67" stroke-width="2" />
+    <text x="2105.0" y="1135" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="23" font-weight="700" text-anchor="middle">Event Streaming</text>
+    <text x="2105.0" y="1162" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Container: Apache Kafka]</text>
+    <text x="2105.0" y="1196" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Подтверждённые оплаты</text>
+    <text x="2105.0" y="1221" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Результаты активации</text>
+    <text x="2105.0" y="1246" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle" />
+    <text x="2105.0" y="1271" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Изменения личных оценок</text>
+    <text x="2105.0" y="1296" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Рассчитанные рейтинги</text>
+    <text x="2105.0" y="1321" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle" />
+    <text x="2105.0" y="1346" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Хранение и доставка событий</text>
+    <text x="2105.0" y="1371" fill="#ffffff" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Повторное чтение потребителями</text>
+  </g>
+  <g id="client_http-label">
+    <rect x="120.0" y="283.0" width="260" height="54" rx="4" fill="#fbfcfe" />
+    <text x="250" y="304" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Работает с системой</text>
+    <text x="250" y="329" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTPS / JSON</text>
+  </g>
+  <g id="route_users-label">
+    <rect x="496.0" y="469.0" width="148" height="50" rx="4" fill="#fbfcfe" />
+    <text x="570" y="488" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Профиль</text>
+    <text x="570" y="513" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTP / JSON</text>
+  </g>
+  <g id="route_movies-label">
+    <rect x="496.0" y="799.0" width="148" height="50" rx="4" fill="#fbfcfe" />
+    <text x="570" y="818" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Каталог</text>
+    <text x="570" y="843" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTP / JSON</text>
+  </g>
+  <g id="route_payments-label">
+    <rect x="496.0" y="1129.0" width="148" height="50" rx="4" fill="#fbfcfe" />
+    <text x="570" y="1148" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Оплата</text>
+    <text x="570" y="1173" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTP / JSON</text>
+  </g>
+  <g id="route_subscriptions-label">
+    <rect x="496.0" y="1459.0" width="148" height="50" rx="4" fill="#fbfcfe" />
+    <text x="570" y="1478" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Подписки</text>
+    <text x="570" y="1503" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTP / JSON</text>
+  </g>
+  <g id="route_activity-label">
+    <rect x="496.0" y="1794.0" width="148" height="50" rx="4" fill="#fbfcfe" />
+    <text x="570" y="1813" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Активность</text>
+    <text x="570" y="1838" fill="#2463a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">HTTP / JSON</text>
+  </g>
+  <g id="store_users-label">
+    <rect x="1003.0" y="466.0" width="234" height="52" rx="4" fill="#fbfcfe" />
+    <text x="1120" y="486" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Читает / пишет</text>
+    <text x="1120" y="511" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">SQL</text>
+  </g>
+  <g id="store_movies-label">
+    <rect x="1003.0" y="796.0" width="234" height="52" rx="4" fill="#fbfcfe" />
+    <text x="1120" y="816" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Каталог и проекция</text>
+    <text x="1120" y="841" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">SQL</text>
+  </g>
+  <g id="store_payments-label">
+    <rect x="1003.0" y="1126.0" width="234" height="52" rx="4" fill="#fbfcfe" />
+    <text x="1120" y="1146" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Платежи и Outbox</text>
+    <text x="1120" y="1171" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">SQL</text>
+  </g>
+  <g id="store_subscriptions-label">
+    <rect x="1003.0" y="1456.0" width="234" height="52" rx="4" fill="#fbfcfe" />
+    <text x="1120" y="1476" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Подписки и Outbox</text>
+    <text x="1120" y="1501" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">SQL</text>
+  </g>
+  <g id="store_activity-label">
+    <rect x="682.5" y="1969.0" width="245" height="52" rx="4" fill="#fbfcfe" />
+    <text x="805" y="1989" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Просмотры, оценки</text>
+    <text x="805" y="2014" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">SQL</text>
+  </g>
+  <g id="store_worker-label">
+    <rect x="1330.0" y="2044.0" width="300" height="52" rx="4" fill="#fbfcfe" />
+    <text x="1480" y="2064" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Читает оценки;</text>
+    <text x="1480" y="2089" fill="#536274" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">пишет расчёт [SQL]</text>
+  </g>
+  <g id="ratings_to_movies-label">
+    <rect x="930.0" y="973.5" width="600" height="35" rx="4" fill="#fbfcfe" />
+    <text x="1230" y="997" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Читает готовые рейтинги [Kafka]</text>
+  </g>
+  <g id="purchase_payments-label">
+    <rect x="845.0" y="1303.5" width="850" height="35" rx="4" fill="#fbfcfe" />
+    <text x="1270" y="1327" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Публикует оплаты; читает результаты активации [Kafka]</text>
+  </g>
+  <g id="purchase_subscriptions-label">
+    <rect x="845.0" y="1633.5" width="850" height="35" rx="4" fill="#fbfcfe" />
+    <text x="1270" y="1657" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Читает оплаты; публикует результаты активации [Kafka]</text>
+  </g>
+  <g id="rating_changes-label">
+    <rect x="845.0" y="2228.5" width="730" height="35" rx="4" fill="#fbfcfe" />
+    <text x="1210" y="2252" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Публикует изменения оценок [Kafka / Outbox]</text>
+  </g>
+  <g id="rating_calculation-label">
+    <rect x="1880.0" y="1791.5" width="320" height="77" rx="4" fill="#fbfcfe" />
+    <text x="2040" y="1812" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">Читает изменения;</text>
+    <text x="2040" y="1837" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">публикует рейтинг</text>
+    <text x="2040" y="1862" fill="#7944a4" font-family="DejaVu Sans, sans-serif" font-size="17" font-weight="400" text-anchor="middle">[Kafka / Outbox]</text>
+  </g>
+  <text x="80" y="783" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Gateway проверяет общие права.</text>
+  <text x="80" y="809" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Ресурсные и бизнес-проверки —</text>
+  <text x="80" y="835" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">в доменных API.</text>
+  <text x="80" y="861" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start" />
+  <text x="80" y="887" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Кэш по умолчанию выключен.</text>
+  <text x="80" y="913" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Кэш и IdP не требуют здесь</text>
+  <text x="80" y="939" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">отдельных контейнеров.</text>
+  <text x="1910" y="568" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Outbox и учёт повторов —</text>
+  <text x="1910" y="594" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">в хранилищах участников.</text>
+  <text x="1910" y="620" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Relay и consumer — внутренние</text>
+  <text x="1910" y="646" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">роли соответствующих сервисов.</text>
+  <text x="1910" y="672" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start" />
+  <text x="1910" y="698" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Хореография Payments /</text>
+  <text x="1910" y="724" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Subscriptions; без оркестратора.</text>
+  <text x="1910" y="750" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start" />
+  <text x="1910" y="776" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Рейтинг в Movies — проекция.</text>
+  <text x="1910" y="802" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Пока расчёт задерживается,</text>
+  <text x="1910" y="828" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">API показывает сохранённое.</text>
+  <text x="1910" y="854" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">До первого результата —</text>
+  <text x="1910" y="880" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">отсутствие рейтинга.</text>
+  <text x="55" y="2333" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Хранилища разделены логически по владельцам. В учебном окружении допустим один PostgreSQL с отдельными БД и доступами.</text>
+  <text x="55" y="2359" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Viewer Activity API и Rating Worker — два приложения одного домена; Kafka не заменяет БД чтения.</text>
+  <text x="55" y="2385" fill="#243449" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="400" text-anchor="start">Диаграмма описывает To-Be. Монолит, учебный events, миграция трафика и развёртывание относятся к заданиям 2–5.</text>
+</svg>

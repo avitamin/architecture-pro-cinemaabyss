@@ -1,0 +1,11 @@
+autoscaleEnabled: false
+replicaCount: 1
+resources:
+  requests: {cpu: 200m, memory: 512Mi}
+  limits: {cpu: 1000m, memory: 1Gi}
+global:
+  imagePullPolicy: IfNotPresent
+meshConfig:
+  accessLogFile: /dev/stdout
+  defaultConfig:
+    holdApplicationUntilProxyStarts: true

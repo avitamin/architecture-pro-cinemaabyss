@@ -63,16 +63,16 @@ npm run test:docker
 
 ```bash
 # Run only Monolith Service tests
-npm run test:monolith
+npm run test:local -- --folder "Monolith Service"
 
 # Run only Movies Microservice tests
-npm run test:movies
+npm run test:local -- --folder "Movies Microservice"
 
 # Run only Events Microservice tests
-npm run test:events
+npm run test:local -- --folder "Events Microservice"
 
 # Run only Proxy Service tests
-npm run test:proxy
+npm run test:local -- --folder "Proxy Service"
 ```
 
 ### Advanced Usage
@@ -120,3 +120,4 @@ If you encounter issues running the tests:
 2. Check the environment configuration in the environment JSON files
 3. Verify that the API endpoints match those in the collection
 4. Increase the timeout value if requests are timing out
+Папка Events использует переменные из запросов Monolith: для приёмки запускайте полную коллекцию `npm run test:local`. Ответ `201` подтверждает публикацию Kafka; обработку проверяйте отдельно по consumer-логам и offsets группы.

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: movies-service
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: movies-service
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
@@ -20,7 +20,12 @@ spec:
       maxUnavailable: 0
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
+        {{- if .Values.istio.enabled }}
+        sidecar.istio.io/inject: "true"
+        {{- end }}
         app: movies-service
     spec:
       containers:
@@ -61,7 +66,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: movies-service
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: movies-service
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
@@ -70,7 +75,8 @@ spec:
   selector:
     app: movies-service
   ports:
-  - port: {{ .Values.moviesService.service.port }}
+  - name: http
+    port: {{ .Values.moviesService.service.port }}
     targetPort: {{ .Values.moviesService.service.targetPort }}
   type: {{ .Values.moviesService.service.type }}
 {{- end }}

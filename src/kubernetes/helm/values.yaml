@@ -1,11 +1,10 @@
 # Global settings
 global:
-  namespace: cinemaabyss
   domain: cinemaabyss.example.com
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: eyJhdXRocyI6e319
 # Database configuration
 database:
   host: postgres
@@ -33,9 +32,9 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
-    tag: latest
-    pullPolicy: Always
+    repository: ghcr.io/avitamin/architecture-pro-cinemaabyss/monolith
+    tag: "sha-27dac03"
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -53,9 +52,9 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
-    tag: latest
-    pullPolicy: Always
+    repository: ghcr.io/avitamin/architecture-pro-cinemaabyss/proxy-service
+    tag: "sha-27dac03"
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -63,7 +62,7 @@ proxyService:
       memory: 256Mi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 64Mi
   service:
     port: 80
     targetPort: 8000
@@ -73,9 +72,9 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
-    tag: latest
-    pullPolicy: Always
+    repository: ghcr.io/avitamin/architecture-pro-cinemaabyss/movies-service
+    tag: "sha-27dac03"
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
@@ -93,14 +92,14 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
-    tag: latest
-    pullPolicy: Always
+    repository: ghcr.io/avitamin/architecture-pro-cinemaabyss/events-service
+    tag: "sha-27dac03"
+    pullPolicy: IfNotPresent
   replicas: 1
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
     requests:
       cpu: 100m
       memory: 128Mi
@@ -162,6 +161,9 @@ zookeeper:
 # Ingress configuration
 ingress:
   enabled: true
+  tls:
+    - hosts:
+        - cinemaabyss.example.com
   className: nginx
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -183,3 +185,7 @@ config:
   # Strangler Fig configuration
   gradualMigration: "true"
   moviesMigrationPercent: "100"
+
+# Optional sidecar injection; requires Istio installed first.
+istio:
+  enabled: false

@@ -1,3 +1,1 @@
-# This file is intentionally left empty
-# The namespace "cinemaabyss" already exists and should be used as-is
-# Use the --namespace flag when installing the chart: helm install cinemaabyss .\src\kubernetes\helm --namespace cinemaabyss --create-namespace
+# Namespace is managed by Helm: helm install cinemaabyss src/kubernetes/helm --namespace cinemaabyss --create-namespace

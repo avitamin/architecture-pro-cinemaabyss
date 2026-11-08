@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: monolith
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: monolith
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
@@ -20,7 +20,12 @@ spec:
       maxUnavailable: 0
   template:
     metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       labels:
+        {{- if .Values.istio.enabled }}
+        sidecar.istio.io/inject: "true"
+        {{- end }}
         app: monolith
     spec:
       containers:
@@ -61,7 +66,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: monolith
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: monolith
     app.kubernetes.io/name: {{ include "cinemaabyss.name" . }}
@@ -70,7 +75,8 @@ spec:
   selector:
     app: monolith
   ports:
-  - port: {{ .Values.monolith.service.port }}
+  - name: http
+    port: {{ .Values.monolith.service.port }}
     targetPort: {{ .Values.monolith.service.targetPort }}
   type: {{ .Values.monolith.service.type }}
 {{- end }}

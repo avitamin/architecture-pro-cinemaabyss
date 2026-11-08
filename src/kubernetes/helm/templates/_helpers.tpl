@@ -65,5 +65,5 @@ Create the name of the service account to use
 Return the namespace
 */}}
 {{- define "cinemaabyss.namespace" -}}
-{{- default .Values.global.namespace .Release.Namespace }}
+{{- .Release.Namespace }}
 {{- end }}
