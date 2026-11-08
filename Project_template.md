@@ -351,6 +351,26 @@ cat .docker/config.json | base64
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
 
+### Результат задания 3 — локальная подготовка
+
+На 2026-11-08 подготовлены изменения поверх `51278615d1b96d04a93dff6378f5dad4e2a30c11`. Ниже зафиксированы проверки локальной подготовки до CI и Kubernetes-приёмки.
+
+- [Build workflow](.github/workflows/docker-build-push.yml): push в `cinema`, четыре образа GHCR, отдельные cache scopes.
+- [API workflow](.github/workflows/api-tests.yml): единственный Compose build/start, ограниченное ожидание HTTP 200, полная Docker-коллекция по умолчанию, HTML/JUnit artifacts и диагностика ошибок. Test image использует `npm ci`.
+- [Kubernetes](src/kubernetes/): заполнены Deployment/Service proxy и events, настроены ingress HTTP/HTTPS и маршруты, URL/Kafka ConfigMap, образы собственного GHCR с tag `cinema`, offsets replication factor 1 и heap Kafka 256–512Mi. Registry Secret содержит только пустой валидный шаблон; private pull требует отдельных credentials.
+
+| Статус | Проверка и предел доказательства |
+| --- | --- |
+| PASS | Разбор двух workflow и raw Kubernetes YAML, `bash -n` shell-блоков, соответствие selectors/ports, четыре build context/cache scopes, `git diff --check` |
+| PASS | `docker compose config --quiet` со стандартной конфигурацией и явным локальным `COMPOSE_FILE`; остаётся предупреждение об устаревшем `version` |
+| PASS | `docker compose build monolith movies-service proxy-service events-service`; использованы доступные кэшированные слои |
+| PASS | Сборка test image с `npm ci`, дополнительно из чистого контекста без локальных node_modules |
+| PASS | Контейнерный Newman с `--environment docker` на существующем Compose-стеке: 22 requests, 45 assertions, 0 failures, exit 0. Стек не пересоздавался; тесты добавили учебные данные. HTML/JUnit сохранены локально |
+| NOT RUN | Оба workflow на одном новом SHA и проверка GHCR tags/digests — следующий этап после публикации |
+| NOT RUN | Создание Minikube, server-side schema validation, deploy, HTTPS, Kubernetes Postman, распределение 0/100, event_processed/lag и реальные скриншоты — следуют после успешного CI |
+
+Локальный Newman подтверждает HTTP API существующего Compose-стека; обработка consumer в этом запуске отдельно не проверялась. Образы ещё не опубликованы. Текущий Kubernetes context `kind-avatar` не менялся. Helm и Istio не изменялись.
+
 ## Задание 4
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
 
